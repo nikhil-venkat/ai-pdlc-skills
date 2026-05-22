@@ -10,8 +10,10 @@ description: Implement the next feature slice against its spec. Use when buildin
 > **Role in the workflow — step 2 of 6.** See [docs/SPECS.md](../../../docs/SPECS.md).
 > - **Input:** the feature's `spec.md` + `research/research.md` — treat them as **ground truth**.
 > - **Output:** working, incremental feature slices plus matching tests.
-> - **Status:** bump the feature's `spec.md` to `In Progress`. Open a PR, and **pair each code-change
->   PR with a test PR** (the `/test` skill).
+> - **Branching & PRs:** create a feature branch off mainline (`main`) **before making any changes** —
+>   **never commit directly to mainline.** Land every change as a PR that is reviewed (`/review`) and
+>   merged (`/ship`); pair each code-change PR with a test PR (the `/test` skill).
+> - **Status:** bump the feature's `spec.md` to `In Progress` when implementation starts.
 > - Build the smallest slice that leaves the app working; verify; then the next. The rest of this skill
 >   is the UI craft for doing that well.
 
