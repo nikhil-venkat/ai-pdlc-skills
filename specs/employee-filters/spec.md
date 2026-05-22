@@ -3,6 +3,7 @@
 **Status:** Draft
 **Last updated:** 2026-05-22
 **Plan task:** 1.4
+**Phase:** 1 — Dashboard
 
 ## Summary
 Multi-select filters for team, tracking status, and account type, populated from the

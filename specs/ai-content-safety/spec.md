@@ -3,6 +3,7 @@
 **Status:** Draft
 **Last updated:** 2026-05-22
 **Plan task:** 2.3
+**Phase:** 2 — AI Insights
 
 ## Summary
 Validate AI-generated text **before it reaches the DOM**: detect and redact PII, gate on

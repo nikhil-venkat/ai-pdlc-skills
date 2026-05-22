@@ -3,6 +3,7 @@
 **Status:** Draft
 **Last updated:** 2026-05-22
 **Plan task:** 1.1
+**Phase:** 1 — Dashboard
 **Design reference:** [Figma — Employees Page](https://www.figma.com/file/nR9Voet7KCWpOYNJzB4O4Z/Frontend-Engineer-Interview-Exercise%3A-Employees-Page?type=design&node-id=5-3055&mode=design) — match pixel-perfect (per the README). Frame exports + manifest: [`design/`](./design/README.md) (9 frames).
 
 ## Summary

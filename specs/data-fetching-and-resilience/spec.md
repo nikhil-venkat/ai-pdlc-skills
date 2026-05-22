@@ -3,6 +3,7 @@
 **Status:** Draft
 **Last updated:** 2026-05-22
 **Plan task:** 0.2
+**Phase:** 0 — Foundation
 
 ## Summary
 A typed GraphQL data layer (TanStack Query + graphql-request) that survives the mock server's

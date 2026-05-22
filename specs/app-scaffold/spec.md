@@ -3,6 +3,7 @@
 **Status:** Draft
 **Last updated:** 2026-05-22
 **Plan task:** 0.1
+**Phase:** 0 — Foundation
 
 ## Summary
 Scaffold the Vite + React + TypeScript app and dev tooling into the existing repo so the feature

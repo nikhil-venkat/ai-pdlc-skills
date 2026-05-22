@@ -3,6 +3,7 @@
 **Status:** Draft
 **Last updated:** 2026-05-22
 **Plan task:** 0.3
+**Phase:** 0 — Foundation
 
 ## Summary
 A runtime feature-flag mechanism to enable/disable the AI insights feature without redeploying.

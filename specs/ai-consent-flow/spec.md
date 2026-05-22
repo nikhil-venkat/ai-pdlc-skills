@@ -3,6 +3,7 @@
 **Status:** Draft
 **Last updated:** 2026-05-22
 **Plan task:** 2.1
+**Phase:** 2 — AI Insights
 
 ## Summary
 An explicit, human-in-the-loop consent step that obtains and manages the consent token required

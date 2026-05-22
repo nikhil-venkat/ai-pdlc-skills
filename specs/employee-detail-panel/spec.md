@@ -3,6 +3,7 @@
 **Status:** Draft
 **Last updated:** 2026-05-22
 **Plan task:** 1.5
+**Phase:** 1 — Dashboard
 
 ## Summary
 A "View" action that opens an accessible side panel (Sheet/Drawer) showing an employee's full

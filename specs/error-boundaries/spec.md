@@ -3,6 +3,7 @@
 **Status:** Draft
 **Last updated:** 2026-05-22
 **Plan task:** 0.3, 3.2
+**Phase:** 0 — Foundation (revisited in Phase 3 — hardening)
 
 ## Summary
 React error boundaries that isolate failures so one broken section (e.g. the AI panel) never

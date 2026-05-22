@@ -3,6 +3,7 @@
 **Status:** Draft
 **Last updated:** 2026-05-22
 **Plan task:** 1.2
+**Phase:** 1 — Dashboard
 
 ## Summary
 Relay-style cursor pagination over the `employees` connection, with stable paging that composes
