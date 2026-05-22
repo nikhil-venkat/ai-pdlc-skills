@@ -1,0 +1,135 @@
+# Specs workflow
+
+A spec is a small, repo-checked folder that captures *what* a feature is, *why* we're
+building it, and *what we found* while researching how to build it. Specs live alongside the
+code so they're easy to find, update, and audit later.
+
+The `/spec <feature-name>` slash command scaffolds a new spec. Research and implementation
+happen conversationally afterward, with the spec files serving as ground truth.
+
+## When to use a spec
+
+Use a spec when:
+
+- The feature is non-trivial (multiple files, multiple decisions, more than a couple hours of work).
+- The feature touches the **live mock API or the AI endpoint** — anything that runs against the
+  chaotic GraphQL server or `GET /api/ai/insights`. Edge cases in real responses (null names,
+  missing accounts, PII contamination, low confidence, timeouts, 429s) are the most common reason
+  work needs a second pass, and the spec is where those findings get recorded.
+- Requirements are not obvious from the request and need to be aligned before implementation.
+
+Skip the spec for bug fixes, routine refactors, dependency bumps, or anything small enough that
+the PR description would say everything worth saying.
+
+## Folder structure
+
+```
+specs/
+  <feature-name>/
+    spec.md                              # what + why (living document)
+    research/
+      research.md                        # initial research findings
+      <YYYY-MM-DD>-<topic>.md            # follow-up notes (post-ship edge cases, etc.)
+```
+
+Feature names are kebab-case (e.g. `employee-table`, `ai-content-safety`).
+
+Specs are **kept forever** — even after a feature ships. They become institutional memory for
+why features look the way they do. Status moves through the lifecycle but the folder stays.
+
+## spec.md — what and why
+
+The user-facing description of the feature. It should be readable by someone who has never seen
+the code. Keep it short; if a section is empty, leave it empty rather than padding.
+
+### Template
+
+```markdown
+# <Feature Name>
+
+**Status:** Draft
+**Last updated:** YYYY-MM-DD
+**Plan task:** <PLAN.md task id, if derived from the plan>
+
+## Summary
+<1–2 sentences. What is this feature?>
+
+## Motivation
+<Why are we building it? What problem does it solve, for whom?>
+
+## Requirements
+<User-facing behavior. Acceptance criteria. What does "done" look like?>
+
+## Open questions
+<Things to resolve during research or implementation.>
+
+## Out of scope
+<What we are explicitly not doing in this iteration.>
+```
+
+### Status values
+
+- **Draft** — spec is being written, requirements not yet stable.
+- **Researching** — spec is stable enough to research against; `research/research.md` is being filled in.
+- **In Progress** — implementation has started.
+- **Shipped** — feature is live in production (merged to mainline).
+
+Status is maintained by hand. When you bump it, also bump **Last updated**.
+
+## research/research.md — how, and what we found
+
+Research is where codebase exploration goes: existing patterns, data shapes, edge cases, and the
+proposed approach. This is what implementation works against. Cross-reference the mock-server
+behavior notes in the root `PLAN.md` and the server source under `mock-server/`.
+
+### Template
+
+```markdown
+# Research: <Feature Name>
+
+## Existing patterns / prior art
+<What in the codebase is relevant? Reference files with paths (e.g. `src/lib/graphql.ts`).>
+
+## Data shapes
+<API contracts, value formats this feature touches. Cross-reference the GraphQL schema and the AI endpoint.>
+
+## Edge cases
+<What we've found in the data or flow that needs handling.>
+
+## Proposed approach
+<How we plan to implement, with file references.>
+
+## Open questions for spec
+<Things research surfaced that need product decisions before implementation can finish.>
+```
+
+If research surfaces a question that changes the spec, **update spec.md** (don't bury the answer
+in research).
+
+## Iteration — handling post-ship findings
+
+Specs are **living documents**. The common case: a feature ships, then an edge case in real API
+responses shows up and the feature needs another pass. When that happens:
+
+1. **Edit spec.md in place** to reflect current truth — update Requirements or Out of scope as
+   needed, bump **Last updated**. Do not maintain a "Revisions" section; git history is the audit trail.
+2. **Add a follow-up file** at `research/<YYYY-MM-DD>-<topic>.md` describing what was learned and
+   what changed (e.g. `research/2026-05-25-pii-regex-gap.md`).
+
+Don't rewrite `research/research.md` after the fact — keep it as the original research record. The
+dated follow-ups document the evolution.
+
+## High-level development workflow
+
+A typical feature lifecycle:
+
+1. **Spec** — `/spec <feature>`. Scaffold the folder, ask clarifying questions, populate spec.md. **Status: Draft.**
+2. **Build** — `/build` ("implement this"). Treat `spec.md` + `research/research.md` as ground truth and build against them. **Status: In Progress.** Open a PR — pair each code-change PR with a matching test PR.
+3. **Code Simplify** — `/code-simplify`. Reduce complexity without changing behavior.
+4. **Review** — `/review`. Multi-axis review (correctness, readability, architecture, security, performance) before merge.
+5. **Test** — `/test`. Prove the behavior — unit/integration tests plus browser verification via Chrome DevTools MCP.
+6. **Ship** — `/ship`. Commit, push, merge to mainline; runs in production. **Status: Shipped.**
+
+**Post-ship iteration** (when needed) — a feature meets real data and an edge case surfaces.
+Edit `spec.md` in place and add `research/<YYYY-MM-DD>-<topic>.md` describing the finding. Status
+may flip back to **In Progress** until the follow-up ships.
