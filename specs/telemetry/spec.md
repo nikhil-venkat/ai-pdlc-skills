@@ -3,6 +3,7 @@
 **Status:** Draft
 **Last updated:** 2026-05-22
 **Plan task:** 0.3, 3.1
+**Phase:** 0 — Foundation (revisited in Phase 3 — instrumentation pass)
 
 ## Summary
 Structured telemetry to `POST /api/telemetry`: a non-throwing client plus instrumentation of the

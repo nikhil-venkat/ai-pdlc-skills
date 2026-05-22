@@ -3,6 +3,7 @@
 **Status:** Draft
 **Last updated:** 2026-05-22
 **Plan task:** 1.3
+**Phase:** 1 — Dashboard
 
 ## Summary
 A debounced name-search box over the `employees` query that resets pagination and shows a clear

@@ -3,6 +3,7 @@
 **Status:** Draft
 **Last updated:** 2026-05-22
 **Plan task:** 2.2
+**Phase:** 2 — AI Insights
 
 ## Summary
 Fetching AI insights from `GET /api/ai/insights/:id` with the consent token, handling the full
