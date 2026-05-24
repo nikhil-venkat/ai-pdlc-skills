@@ -1,192 +1,136 @@
-# Specs & the Development Workflow
+# Specs workflow
 
-> **Source of truth** for how a feature moves from idea to mainline in `<project-name>`.
->
-> The `/spec`, `/build`, `/code-simplify`, `/review`, `/test`, and `/ship` skills all defer to this
-> document for the workflow, folder structure, templates, status values, and iteration rules. When a
-> skill and this doc disagree, **this doc wins** — read it first.
+A spec is a small, repo-checked folder that captures *what* a feature is, *why* we're
+building it, and *what we found* while researching how to build it. Specs live alongside the
+code so they're easy to find, update, and audit later.
 
-## Philosophy
+The `/spec <feature-name>` slash command scaffolds a new spec. Research and implementation
+happen conversationally afterward, with the spec files serving as ground truth.
 
-**Spec before code.** Every non-trivial change starts as a short written spec so that intent is
-agreed before implementation. The spec is a *living document*: it is created up front, kept accurate
-while the feature is built, and updated in place when reality teaches us something after shipping.
+## When to use a spec
 
-Three properties keep the system honest:
+Use a spec when:
 
-- **One spec per feature**, in its own folder, so work is self-contained and reviewable.
-- **Status is explicit** (`Draft` → `In Progress` → `Shipped`) so anyone can see where a feature
-  stands at a glance.
-- **Git history is the audit trail.** We edit specs in place and add dated follow-ups rather than
-  rewriting history — the diff log tells the story of how the feature evolved.
+- The feature is non-trivial (multiple files, multiple decisions, more than a couple hours of work).
+- The feature touches an **external API or a security-sensitive path** — anything that runs against
+  an external or mock server or an untrusted data source. Edge cases in real responses (null or
+  missing fields, malformed data, sensitive-data/PII contamination, low confidence, timeouts, 429s)
+  are the most common reason work needs a second pass, and the spec is where those findings get
+  recorded.
+- Requirements are not obvious from the request and need to be aligned before implementation.
 
-## The workflow (6 steps)
-
-Each feature flows through six steps, each backed by a skill. Steps run in order; later steps may
-send you back to an earlier one (a failed review sends you back to build).
-
-| # | Skill            | Purpose                                                        | Status after        |
-|---|------------------|----------------------------------------------------------------|---------------------|
-| 1 | `/spec`          | Define **what** to build and **why**, before any code.         | `Draft`             |
-| 2 | `/build`         | Implement the feature in small, working slices + tests.        | `In Progress`       |
-| 3 | `/code-simplify` | Polish the new code for clarity; behavior unchanged.           | `In Progress`       |
-| 4 | `/review`        | Multi-axis review against the spec's acceptance criteria.      | `In Progress`       |
-| 5 | `/test`          | Prove it works — automated tests + runtime/browser checks.     | `In Progress`       |
-| 6 | `/ship`          | Merge to mainline via PR; record the feature as done.          | `Shipped`           |
-
-```
-/spec → /build → /code-simplify → /review → /test → /ship
-  │        ▲           ▲              │                  │
-  │        └───────────┴──────────────┘ (review/test     │
-  └─ Draft                              can loop back)    └─ Shipped
-```
-
-Branching and PR discipline (shared by every step that writes code):
-
-- **Create a feature branch off mainline (`main`) before making any changes.** Never commit directly
-  to mainline.
-- **Land every change as a reviewed PR** targeting `main`. Pair each code-change PR with a test PR
-  (per `/test`).
-- **Attach a verification comment to each PR** with the build/test/lint output, so reviewers and
-  future readers never have to re-run the checks to know they passed (see the `/build` skill for the
-  exact format).
+Skip the spec for bug fixes, routine refactors, dependency bumps, or anything small enough that
+the PR description would say everything worth saying.
 
 ## Folder structure
-
-Every feature gets one folder under `specs/`, named in kebab-case:
 
 ```
 specs/
   <feature-name>/
-    spec.md                       # What & why — a living document (edited in place)
+    spec.md                              # what + why (living document)
     research/
-      research.md                 # Initial investigation — written once, not rewritten
-      <YYYY-MM-DD>-<topic>.md      # Post-ship follow-up findings (one file per finding)
+      research.md                        # initial research findings
+      <YYYY-MM-DD>-<topic>.md            # follow-up notes (post-ship edge cases, etc.)
 ```
 
-- **Kebab-case the feature name** (e.g. "Audit log retention" → `audit-log-retention`).
-- `spec.md` is mandatory. `research/research.md` is created alongside it and holds the up-front
-  investigation.
-- Dated `research/<YYYY-MM-DD>-<topic>.md` files accumulate over time as the feature meets real data.
+Feature names are kebab-case (e.g. `audit-log-retention`, `bulk-export`).
 
-## Status values
+Specs are **kept forever** — even after a feature ships. They become institutional memory for
+why features look the way they do. Status moves through the lifecycle but the folder stays.
 
-`spec.md` carries a **Status** field with exactly one of these values:
+## spec.md — what and why
 
-| Status        | Meaning                                                        | Set by    |
-|---------------|----------------------------------------------------------------|-----------|
-| `Draft`       | Spec is being written; implementation has not started.         | `/spec`   |
-| `In Progress` | Implementation is underway (build / simplify / review / test). | `/build`  |
-| `Shipped`     | The change is merged and live on mainline.                     | `/ship`   |
+The user-facing description of the feature. It should be readable by someone who has never seen
+the code. Keep it short; if a section is empty, leave it empty rather than padding.
 
-```
-Draft ──/build──▶ In Progress ──/ship──▶ Shipped
-                       ▲                     │
-                       └──── post-ship ──────┘
-                         finding reopens it
-```
-
-A `Shipped` feature may flip back to `In Progress` when a post-ship finding requires a follow-up,
-then return to `Shipped` when that follow-up ships.
-
-## `spec.md` template
-
-Copy this when scaffolding a new spec. Use today's date for **Last updated** and set **Status** to
-`Draft`.
+### Template
 
 ```markdown
-# <Feature name>
+# <Feature Name>
 
-- **Status:** Draft
-- **Last updated:** <YYYY-MM-DD>
-- **Owner:** <name or team>
+**Status:** Draft
+**Last updated:** YYYY-MM-DD
+**Plan task:** <task id from PLAN.md, if derived from a plan>
 
 ## Summary
-
-One or two sentences: what this feature is, in plain language.
+<1–2 sentences. What is this feature?>
 
 ## Motivation
-
-Why build this, and why now? What problem does it solve, and for whom? What happens if we don't?
+<Why are we building it? What problem does it solve, for whom?>
 
 ## Requirements
-
-What the feature must do — functional and non-functional. Be specific enough that someone else could
-implement it. Link to designs, APIs, or constraints where relevant.
-
-## Acceptance criteria
-
-Concrete, testable conditions that define "done." `/review`, `/test`, and `/ship` check against this
-list — keep it sharp.
-
-- [ ] <observable behavior or invariant the feature must satisfy>
-- [ ] <edge case / failure path that must be handled>
-- [ ] <non-functional bar: performance, accessibility, security, etc.>
+<User-facing behavior. Acceptance criteria. What does "done" look like?>
 
 ## Open questions
-
-- <unresolved decision blocking or shaping the work>
+<Things to resolve during research or implementation.>
 
 ## Out of scope
-
-- <explicitly excluded so the boundary is clear and the change stays small>
+<What we are explicitly not doing in this iteration.>
 ```
 
-## `research/research.md` template
+### Status values
 
-The up-front investigation. Written once during the spec/research phase; **don't rewrite it after the
-fact** — later findings go in dated follow-up files instead.
+- **Draft** — spec is being written, requirements not yet stable.
+- **Researching** — spec is stable enough to research against; `research/research.md` is being filled in.
+- **In Progress** — implementation has started.
+- **Shipped** — feature is live in production (merged to mainline).
+
+Status is maintained by hand. When you bump it, also bump **Last updated**.
+
+## research/research.md — how, and what we found
+
+Research is where codebase exploration goes: existing patterns, data shapes, edge cases, and the
+proposed approach. This is what implementation works against. Cross-reference any relevant notes in
+the root `PLAN.md` and the source of any external or mock server the feature depends on.
+
+### Template
 
 ```markdown
-# Research: <Feature name>
+# Research: <Feature Name>
 
-- **Last updated:** <YYYY-MM-DD>
+## Existing patterns / prior art
+<What in the codebase is relevant? Reference files with paths (e.g. `src/lib/api.ts`).>
 
-## Questions to answer
+## Data shapes
+<API contracts, value formats this feature touches. Cross-reference the relevant API schema or data source.>
 
-- <what we need to learn before/while building>
+## Edge cases
+<What we've found in the data or flow that needs handling.>
 
-## Findings
+## Proposed approach
+<How we plan to implement, with file references.>
 
-What the investigation turned up — data, constraints, existing-code behavior, prior art.
-
-## Options considered
-
-| Option | Pros | Cons |
-|--------|------|------|
-| A      |      |      |
-| B      |      |      |
-
-## Decision
-
-Which option we chose and why. Note the trade-offs we accepted.
-
-## References
-
-- <links to docs, issues, benchmarks, design files>
+## Open questions for spec
+<Things research surfaced that need product decisions before implementation can finish.>
 ```
 
-## Iteration rules
+If research surfaces a question that changes the spec, **update spec.md** (don't bury the answer
+in research).
 
-**While building (Draft → Shipped):** keep `spec.md` accurate as the implementation reveals reality.
-Update Requirements, Acceptance criteria, and Open questions in place, and bump **Last updated**.
+## Iteration — handling post-ship findings
 
-**After shipping (post-ship findings):** when a shipped feature meets real data and an edge case
-surfaces, **do not open a new spec**. Instead:
+Specs are **living documents**. The common case: a feature ships, then an edge case in real API
+responses shows up and the feature needs another pass. When that happens:
 
-1. **Edit `spec.md` in place** to reflect the new understanding, and bump **Last updated**.
-2. **Add a `specs/<feature-name>/research/<YYYY-MM-DD>-<topic>.md`** file describing the finding and
-   what you changed.
-3. **Never rewrite `research/research.md` after the fact** — it is the record of the original
-   investigation. Git history is the audit trail.
-4. Flip **Status** back to `In Progress` if a follow-up change is underway; return it to `Shipped`
-   once that follow-up ships.
+1. **Edit spec.md in place** to reflect current truth — update Requirements or Out of scope as
+   needed, bump **Last updated**. Do not maintain a "Revisions" section; git history is the audit trail.
+2. **Add a follow-up file** at `research/<YYYY-MM-DD>-<topic>.md` describing what was learned and
+   what changed (e.g. `research/2026-05-25-timeout-handling.md`).
 
-## Conventions summary
+Don't rewrite `research/research.md` after the fact — keep it as the original research record. The
+dated follow-ups document the evolution.
 
-- One spec per feature, kebab-cased, under `specs/<feature-name>/`.
-- `spec.md` is the living source of truth; `research/research.md` is write-once.
-- Status is always one of `Draft`, `In Progress`, `Shipped`.
-- Branch off `main`; never commit to mainline directly; every change ships as a reviewed PR with a
-  verification comment.
-- Edit in place and add dated follow-ups; let git history carry the story.
+## High-level development workflow
+
+A typical feature lifecycle:
+
+1. **Spec** — `/spec <feature>`. Scaffold the folder, ask clarifying questions, populate spec.md. **Status: Draft.**
+2. **Build** — `/build` ("implement this"). Treat `spec.md` + `research/research.md` as ground truth and build against them. **Status: In Progress.** Open a PR — pair each code-change PR with a matching test PR.
+3. **Code Simplify** — `/code-simplify`. Reduce complexity without changing behavior.
+4. **Review** — `/review`. Multi-axis review (correctness, readability, architecture, security, performance) before merge.
+5. **Test** — `/test`. Prove the behavior — unit/integration tests plus browser verification via Playwright MCP.
+6. **Ship** — `/ship`. Commit, push, merge to mainline; runs in production. **Status: Shipped.**
+
+**Post-ship iteration** (when needed) — a feature meets real data and an edge case surfaces.
+Edit `spec.md` in place and add `research/<YYYY-MM-DD>-<topic>.md` describing the finding. Status
+may flip back to **In Progress** until the follow-up ships.
