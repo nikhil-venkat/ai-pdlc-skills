@@ -9,7 +9,7 @@ description: Conducts multi-axis code review. Use before merging any change. Use
 > - **Runs after** `/code-simplify`, **before** `/test` and `/ship`.
 > - **Input:** the change for a feature (yours or another agent's), checked against its `spec.md` acceptance criteria.
 > - **Output:** an approve / iterate decision across the five axes below; blocking issues fixed before merge.
-> - For this project, weight **security** heavily on the AI path — PII must never reach the DOM or telemetry (see the `ai-content-safety` spec).
+> - Weight **security** heavily on your project's most sensitive path (e.g. any flow handling PII, secrets, or untrusted input) — sensitive data must never reach the DOM, logs, or telemetry.
 
 ## Overview
 
