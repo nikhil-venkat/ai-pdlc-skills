@@ -120,17 +120,33 @@ responses shows up and the feature needs another pass. When that happens:
 Don't rewrite `research/research.md` after the fact — keep it as the original research record. The
 dated follow-ups document the evolution.
 
-## High-level development workflow
+## The workflow (6 steps)
 
-A typical feature lifecycle:
+Each feature flows through six steps, each backed by a skill. Steps run in order; later steps may
+send you back to an earlier one (a failed review sends you back to build).
 
-1. **Spec** — `/spec <feature>`. Scaffold the folder, ask clarifying questions, populate spec.md. **Status: Draft.**
-2. **Build** — `/build` ("implement this"). Treat `spec.md` + `research/research.md` as ground truth and build against them. **Status: In Progress.** Open a PR — pair each code-change PR with a matching test PR.
-3. **Code Simplify** — `/code-simplify`. Reduce complexity without changing behavior.
-4. **Review** — `/review`. Multi-axis review (correctness, readability, architecture, security, performance) before merge.
-5. **Test** — `/test`. Prove the behavior — unit/integration tests plus browser verification via Playwright MCP.
-6. **Ship** — `/ship`. Commit, push, merge to mainline; runs in production. **Status: Shipped.**
+| # | Skill            | Purpose                                                        | Status after        |
+|---|------------------|----------------------------------------------------------------|---------------------|
+| 1 | `/spec`          | Define **what** to build and **why**, before any code.         | `Draft`             |
+| 2 | `/build`         | Implement the feature in small, working slices + tests.        | `In Progress`       |
+| 3 | `/code-simplify` | Polish the new code for clarity; behavior unchanged.           | `In Progress`       |
+| 4 | `/review`        | Multi-axis review against the spec's acceptance criteria.      | `In Progress`       |
+| 5 | `/test`          | Prove it works — automated tests + runtime/browser checks.     | `In Progress`       |
+| 6 | `/ship`          | Merge to mainline via PR; record the feature as done.          | `Shipped`           |
 
-**Post-ship iteration** (when needed) — a feature meets real data and an edge case surfaces.
-Edit `spec.md` in place and add `research/<YYYY-MM-DD>-<topic>.md` describing the finding. Status
-may flip back to **In Progress** until the follow-up ships.
+```
+/spec → /build → /code-simplify → /review → /test → /ship
+  │        ▲           ▲              │                  │
+  │        └───────────┴──────────────┘ (review/test     │
+  └─ Draft                              can loop back)    └─ Shipped
+```
+
+Branching and PR discipline (shared by every step that writes code):
+
+- **Create a feature branch off mainline (`main`) before making any changes.** Never commit directly
+  to mainline.
+- **Land every change as a reviewed PR** targeting `main`. Pair each code-change PR with a test PR
+  (per `/test`).
+- **Attach a verification comment to each PR** with the build/test/lint output, so reviewers and
+  future readers never have to re-run the checks to know they passed (see the `/build` skill for the
+  exact format).
