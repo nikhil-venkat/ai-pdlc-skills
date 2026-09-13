@@ -7,8 +7,9 @@ description: Ship a feature to mainline. Use as the final workflow step once a f
 
 > Key principle: Faster is safer. Small, frequent, well-verified merges beat big-bang releases.
 >
-> **Role in the workflow — step 6 of 6.** See [docs/SPECS.md](../../../docs/SPECS.md).
-> - **Runs after** `/test` (and only after `/review` has approved).
+> **Role in the workflow — step 7 of 7.** See [docs/SPECS.md](../../../docs/SPECS.md).
+> - **Runs after** `/test` — and `/verify` where a reviewer needs to see the behavior — and only
+>   after `/review` has approved.
 > - **Input:** a feature whose `spec.md` acceptance criteria are met, tests pass, and review is green.
 > - **Output:** the change merged to mainline; the feature's `spec.md` **Status** bumped to `Shipped`.
 
@@ -34,6 +35,8 @@ of the `<project-name>` repo.
 - [ ] A **verification comment** is attached to the PR with the build/test/lint output
       (see the `build` skill Verification section for the exact format).
 - [ ] `/review` approved; all blocking issues resolved.
+- [ ] For access-control, security-gate, or visually-observable changes: a `/verify` recording and
+      its assertion log are attached to the PR, and the PR states anything not exercised live.
 - [ ] For features with UI: browser-verified against the project's mock/dev server, including
       relevant failure paths (forced 5xx / 429 / timeout / malformed data via env knobs) — see the
       `test` skill. For pure-logic / infrastructure features (telemetry, flags, etc.) this

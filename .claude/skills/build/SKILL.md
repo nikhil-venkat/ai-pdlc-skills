@@ -7,7 +7,7 @@ description: Implement the next feature slice against its spec. Use when buildin
 
 > Key principle: One slice at a time.
 >
-> **Role in the workflow — step 2 of 6.** See [docs/SPECS.md](../../../docs/SPECS.md).
+> **Role in the workflow — step 2 of 7.** See [docs/SPECS.md](../../../docs/SPECS.md).
 > - **Input:** the feature's `spec.md` + `research/research.md` — treat them as **ground truth**.
 > - **Output:** working, incremental feature slices plus matching tests.
 > - **Branching & PRs:** create a feature branch off mainline (`main`) **before making any changes** —

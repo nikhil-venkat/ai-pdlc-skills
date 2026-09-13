@@ -5,7 +5,7 @@ description: Conducts multi-axis code review. Use before merging any change. Use
 
 # Review (Code Review and Quality)
 
-> **Role in the workflow — step 4 of 6.** See [docs/SPECS.md](../../../docs/SPECS.md).
+> **Role in the workflow — step 4 of 7.** See [docs/SPECS.md](../../../docs/SPECS.md).
 > - **Runs after** `/code-simplify`, **before** `/test` and `/ship`.
 > - **Input:** the change for a feature (yours or another agent's), checked against its `spec.md` acceptance criteria.
 > - **Output:** an approve / iterate decision across the five axes below; blocking issues fixed before merge.

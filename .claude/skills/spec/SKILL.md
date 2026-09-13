@@ -7,7 +7,7 @@ description: Define what to build before writing code. Use when starting a new f
 
 > Key principle: Spec before code.
 >
-> **Role in the workflow — step 1 of 6.** See [docs/SPECS.md](../../../docs/SPECS.md) for the
+> **Role in the workflow — step 1 of 7.** See [docs/SPECS.md](../../../docs/SPECS.md) for the
 > full workflow, folder structure, templates, status values, and iteration rules. This skill is the
 > command behavior; `docs/SPECS.md` is the source of truth — read it first and follow it precisely.
 

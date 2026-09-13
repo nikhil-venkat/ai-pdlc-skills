@@ -7,7 +7,7 @@ description: Simplifies code for clarity. Use when refactoring code for clarity 
 
 > Key principle: Clarity over cleverness.
 >
-> **Role in the workflow — step 3 of 6.** See [docs/SPECS.md](../../../docs/SPECS.md).
+> **Role in the workflow — step 3 of 7.** See [docs/SPECS.md](../../../docs/SPECS.md).
 > - **Runs after** `/build`, **before** `/review`.
 > - **Input:** the code just built for a feature. **Output:** simpler code with **behavior unchanged**
 >   (the `/test` suite must stay green). No status change — this is a polish pass before review.
