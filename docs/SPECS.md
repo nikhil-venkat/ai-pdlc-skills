@@ -120,9 +120,9 @@ responses shows up and the feature needs another pass. When that happens:
 Don't rewrite `research/research.md` after the fact — keep it as the original research record. The
 dated follow-ups document the evolution.
 
-## The workflow (6 steps)
+## The workflow (7 steps)
 
-Each feature flows through six steps, each backed by a skill. Steps run in order; later steps may
+Each feature flows through seven steps, each backed by a skill. Steps run in order; later steps may
 send you back to an earlier one (a failed review sends you back to build).
 
 | # | Skill            | Purpose                                                        | Status after        |
@@ -132,14 +132,19 @@ send you back to an earlier one (a failed review sends you back to build).
 | 3 | `/code-simplify` | Polish the new code for clarity; behavior unchanged.           | `In Progress`       |
 | 4 | `/review`        | Multi-axis review against the spec's acceptance criteria.      | `In Progress`       |
 | 5 | `/test`          | Prove it works — automated tests + runtime/browser checks.     | `In Progress`       |
-| 6 | `/ship`          | Merge to mainline via PR; record the feature as done.          | `Shipped`           |
+| 6 | `/verify`        | Record the proof a reviewer needs to see; attach it to the PR. | `In Progress`       |
+| 7 | `/ship`          | Merge to mainline via PR; record the feature as done.          | `Shipped`           |
 
 ```
-/spec → /build → /code-simplify → /review → /test → /ship
-  │        ▲           ▲              │                  │
-  │        └───────────┴──────────────┘ (review/test     │
-  └─ Draft                              can loop back)    └─ Shipped
+/spec → /build → /code-simplify → /review → /test → /verify → /ship
+  │        ▲           ▲              │                           │
+  │        └───────────┴──────────────┘ (review/test/verify       │
+  └─ Draft                               can loop back)            └─ Shipped
 ```
+
+`/verify` is **conditional**: run it when a reviewer needs to *see* the behavior — access control,
+auth flows, security gates, error states, visual bug fixes. Skip it for backend-only or pure-logic
+changes, where `/test` is the whole proof.
 
 Branching and PR discipline (shared by every step that writes code):
 

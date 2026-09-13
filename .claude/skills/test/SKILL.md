@@ -7,7 +7,7 @@ description: Prove the change works. Use when implementing logic, fixing a bug, 
 
 > Key principle: Tests are proof.
 >
-> **Role in the workflow — step 5 of 6.** See [docs/SPECS.md](../../../docs/SPECS.md).
+> **Role in the workflow — step 5 of 7.** See [docs/SPECS.md](../../../docs/SPECS.md).
 > - **Input:** the implemented feature + its `spec.md` acceptance criteria.
 > - **Output:** automated tests that encode those criteria, plus browser-verified runtime behavior.
 > - Pair each code-change PR with a test PR (per `/build`).
