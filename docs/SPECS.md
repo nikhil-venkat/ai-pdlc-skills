@@ -126,6 +126,8 @@ Each feature flows through seven steps, each backed by a skill. Steps run in ord
 send you back to an earlier one (a failed review sends you back to build).
 In an unfamiliar codebase, run the optional step 0, `/orient`, first. It is read-only and produces
 the map of conventions that the later steps hold the code to.
+Within `/build`, `/dictate` turns spoken or rough notes into a six-line prompt for one slice
+(goal, step, files to read, rules, done-when, stop) and waits for "go" before building.
 
 | # | Skill            | Purpose                                                        | Status after        |
 |---|------------------|----------------------------------------------------------------|---------------------|
