@@ -124,9 +124,12 @@ dated follow-ups document the evolution.
 
 Each feature flows through seven steps, each backed by a skill. Steps run in order; later steps may
 send you back to an earlier one (a failed review sends you back to build).
+In an unfamiliar codebase, run the optional step 0, `/orient`, first. It is read-only and produces
+the map of conventions that the later steps hold the code to.
 
 | # | Skill            | Purpose                                                        | Status after        |
 |---|------------------|----------------------------------------------------------------|---------------------|
+| 0 | `/orient`        | *Optional.* Map an unfamiliar codebase before specifying work. | (no change)         |
 | 1 | `/spec`          | Define **what** to build and **why**, before any code.         | `Draft`             |
 | 2 | `/build`         | Implement the feature in small, working slices + tests.        | `In Progress`       |
 | 3 | `/code-simplify` | Polish the new code for clarity; behavior unchanged.           | `In Progress`       |
